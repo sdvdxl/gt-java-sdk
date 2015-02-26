@@ -49,6 +49,26 @@ public class GeetestLib {
 
 	private String challengeId = "";
 
+	private String picId = "";// set the own private pictures,default is ""
+	
+	private String productType="embed";//the captcha product type,default is 'embed'
+
+	public String getProductType() {
+		return productType;
+	}
+
+	public void setProductType(String productType) {
+		this.productType = productType;
+	}
+
+	public String getPicId() {
+		return picId;
+	}
+
+	public void setPicId(String picId) {
+		this.picId = picId;
+	}
+
 	public String getChallengeId() {
 		return challengeId;
 	}
@@ -136,14 +156,18 @@ public class GeetestLib {
 	 *            product display mode :float,embed,popup
 	 * @return
 	 */
-	public String getGtFrontSource(int picId, String productType) {
+	public String getGtFrontSource() {
 
+		// String frontSource = String.format(
+		// "<script type=\"text/javascript\" src=\"%s/get.php?"
+		// + "gt=%s&challenge=%s&pic=%s&product=%s\"></script>",
+		// this.api_url, this.captchaId, this.challengeId, picId,
+		// productType);
 		String frontSource = String.format(
 				"<script type=\"text/javascript\" src=\"%s/get.php?"
-						+ "gt=%s&challenge=%s&pic=%s&product=%s\"></script>",
-				this.api_url, this.captchaId, this.challengeId, picId,
-				productType);
-		// System.out.print(frontSource);
+						+ "gt=%s&challenge=%s&product=%s\"></script>",
+				this.api_url, this.captchaId, this.challengeId, this.productType);
+		gtlog(frontSource);
 		return frontSource;
 	}
 
@@ -190,8 +214,19 @@ public class GeetestLib {
 	 */
 	public int registerChallenge() {
 		try {
-			String GET_URL = api_url + "/register.php?gt=" + this.captchaId
-					+ "&challenge=" + this.challengeId;
+
+			String GET_URL = "";
+			if (this.picId == "") {
+				GET_URL = api_url + "/register.php?gt=" + this.captchaId
+						+ "&challenge=" + this.challengeId;
+				
+			} else {
+				GET_URL = api_url + "/register.php?gt=" + this.captchaId
+						+ "&challenge=" + this.challengeId + "&pic="
+						+ this.picId;
+				gtlog("use private picture id");
+			}
+
 			// System.out.print(GET_URL);
 			String result_str = readContentFromGet(GET_URL);
 			// System.out.println(result_str);
@@ -388,7 +423,7 @@ public class GeetestLib {
 	 * @param message
 	 */
 	public void gtlog(String message) {
-		// System.out.println("gtlog: " + message);
+		//System.out.println(message);
 	}
 
 	private boolean checkResultByPrivate(String origin, String validate) {
