@@ -37,24 +37,58 @@ public class GeetestLib {
 
 	private final String api_url = "http://api.geetest.com";
 
-	/**
-	 * 私钥
-	 */
-	private String privateKey = "";
+	private final int defaultMobileWidth = 260;// the default width of the mible
+												// capthca
 
 	/**
 	 * 公钥
 	 */
 	private String captchaId = "";
 
+	/**
+	 * 私钥
+	 */
+	private String privateKey = "";
+
+	/**
+	 * the challenge
+	 */
 	private String challengeId = "";
 
-	private String picId = "";// set the own private pictures,default is ""
-	
-	private String productType="embed";//the captcha product type,default is 'embed'
+	/**
+	 * set the own private pictures,default is ""
+	 */
+	private String picId = "";
 
-	public String getProductType() {
-		return productType;
+	/**
+	 * he captcha product type,default is 'embed'
+	 */
+	private String productType = "embed";
+
+	/**
+	 * 是否是移动端的
+	 */
+	private Boolean isMobile = false;
+
+	/**
+	 * 验证模块的默认宽度
+	 */
+	private int width = defaultMobileWidth;
+
+	public Boolean getIsMobile() {
+		return isMobile;
+	}
+
+	public void setIsMobile(Boolean isMobile) {
+		this.isMobile = isMobile;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
 	}
 
 	public void setProductType(String productType) {
@@ -166,7 +200,8 @@ public class GeetestLib {
 		String frontSource = String.format(
 				"<script type=\"text/javascript\" src=\"%s/get.php?"
 						+ "gt=%s&challenge=%s&product=%s\"></script>",
-				this.api_url, this.captchaId, this.challengeId, this.productType);
+				this.api_url, this.captchaId, this.challengeId,
+				this.productType);
 		gtlog(frontSource);
 		return frontSource;
 	}
@@ -214,17 +249,24 @@ public class GeetestLib {
 	 */
 	public int registerChallenge() {
 		try {
+			String baseRegUrl = api_url + "/register.php?gt=" + this.captchaId
+					+ "&challenge=" + this.challengeId;
 
-			String GET_URL = "";
-			if (this.picId == "") {
-				GET_URL = api_url + "/register.php?gt=" + this.captchaId
-						+ "&challenge=" + this.challengeId;
-				
-			} else {
-				GET_URL = api_url + "/register.php?gt=" + this.captchaId
-						+ "&challenge=" + this.challengeId + "&pic="
-						+ this.picId;
+			String GET_URL = api_url + "/register.php?gt=" + this.captchaId
+					+ "&challenge=" + this.challengeId;
+
+			if (this.picId != "") {
+				GET_URL += String.format("&pic=%s", this.picId);
 				gtlog("use private picture id");
+			}
+
+			if (this.isMobile) {
+				GET_URL += String
+						.format("&mobile=%s", this.isMobile.toString());
+			}
+
+			if (this.width != defaultMobileWidth) {
+				GET_URL += String.format("&width=%s", this.width);
 			}
 
 			// System.out.print(GET_URL);
@@ -423,7 +465,7 @@ public class GeetestLib {
 	 * @param message
 	 */
 	public void gtlog(String message) {
-		//System.out.println(message);
+		// System.out.println(message);
 	}
 
 	private boolean checkResultByPrivate(String origin, String validate) {
