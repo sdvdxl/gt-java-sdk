@@ -59,7 +59,7 @@ body {
 					// todo: use the captcha_id to init the geetestSdk
 					geetestSdk.setCaptchaId("a40fd3b0d712165c5d13e6f747e948d4");//TIDO:set your own catpcha_id
 					geetestSdk.setPicId("0084b06a");//TODO:set your picture id after
-					geetestSdk.setIsMobile(true);
+					geetestSdk.setIsMobile(0);
 					geetestSdk.setWidth(260);
 				%>
 				<%
@@ -100,7 +100,8 @@ body {
 							geetest_validate : validate,
 							geetest_seccode : seccode
 						},
-						success : function() {
+						success : function(result) {
+							console.log(result);
 						}
 					})
 

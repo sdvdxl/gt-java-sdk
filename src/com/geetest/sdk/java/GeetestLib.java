@@ -35,8 +35,10 @@ public class GeetestLib {
 	 */
 	private final String verName = "15.1.28.1";
 
-	private final String api_url = "http://api.geetest.com";
+	private final String baseUrl = "vapi.geetest.com";
+	private final String api_url = "http://"+ baseUrl;
 
+	private final int defaultIsMobile = 0;
 	private final int defaultMobileWidth = 260;// the default width of the mible
 												// capthca
 
@@ -68,18 +70,18 @@ public class GeetestLib {
 	/**
 	 * 是否是移动端的
 	 */
-	private Boolean isMobile = false;
+	private int isMobile = defaultIsMobile;// 1--true,0-false
 
 	/**
 	 * 验证模块的默认宽度
 	 */
 	private int width = defaultMobileWidth;
 
-	public Boolean getIsMobile() {
+	public int getIsMobile() {
 		return isMobile;
 	}
 
-	public void setIsMobile(Boolean isMobile) {
+	public void setIsMobile(int isMobile) {
 		this.isMobile = isMobile;
 	}
 
@@ -249,26 +251,12 @@ public class GeetestLib {
 	 */
 	public int registerChallenge() {
 		try {
-			String baseRegUrl = api_url + "/register.php?gt=" + this.captchaId
-					+ "&challenge=" + this.challengeId;
+			String GET_URL = api_url + "/register.php?gt=" + this.captchaId;
 
-			String GET_URL = api_url + "/register.php?gt=" + this.captchaId
-					+ "&challenge=" + this.challengeId;
-
-			if (this.picId != "") {
-				GET_URL += String.format("&pic=%s", this.picId);
-				gtlog("use private picture id");
-			}
-
-			if (this.isMobile) {
-				GET_URL += String
-						.format("&mobile=%s", this.isMobile.toString());
-			}
-
-			if (this.width != defaultMobileWidth) {
-				GET_URL += String.format("&width=%s", this.width);
-			}
-
+			GET_URL += String.format("&pic=%s", this.picId);
+			GET_URL += String.format("&mobile=%s", this.isMobile);
+			GET_URL += String.format("&width=%s", this.width);
+			gtlog("register:" + GET_URL);
 			// System.out.print(GET_URL);
 			String result_str = readContentFromGet(GET_URL);
 			// System.out.println(result_str);
@@ -388,12 +376,12 @@ public class GeetestLib {
 	 * @return
 	 */
 	public String enhencedValidateRequest(HttpServletRequest request) {
-
+		gtlog("validate");
 		String challenge = request.getParameter("geetest_challenge");
 		String validate = request.getParameter("geetest_validate");
 		String seccode = request.getParameter("geetest_seccode");
 
-		String host = "api.geetest.com";
+		String host =  baseUrl;
 		String path = "/validate.php";
 		int port = 80;
 		String query = "seccode=" + seccode;
@@ -407,9 +395,9 @@ public class GeetestLib {
 			if (!checkResultByPrivate(challenge, validate)) {
 				return "fail";
 			}
-
+			gtlog("before-response: " + host);
 			response = postValidate(host, path, query, port);
-			gtlog("response: " + response);
+			gtlog("after-response: " + response);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -434,7 +422,8 @@ public class GeetestLib {
 	 * @time 2014122_171529 by zheng
 	 */
 	private boolean validate(String challenge, String validate, String seccode) {
-		String host = "api.geetest.com";
+		gtlog("validate");
+		String host =  baseUrl;
 		String path = "/validate.php";
 		int port = 80;
 		if (validate.length() > 0 && checkResultByPrivate(challenge, validate)) {
@@ -444,6 +433,7 @@ public class GeetestLib {
 				response = postValidate(host, path, query, port);
 				gtlog(response);
 			} catch (Exception e) {
+				gtlog("exception-validate: " + md5Encode(seccode));
 				e.printStackTrace();
 			}
 
@@ -465,7 +455,7 @@ public class GeetestLib {
 	 * @param message
 	 */
 	public void gtlog(String message) {
-		// System.out.println(message);
+		//System.out.println(message);
 	}
 
 	private boolean checkResultByPrivate(String origin, String validate) {
@@ -476,31 +466,41 @@ public class GeetestLib {
 	private String postValidate(String host, String path, String data, int port)
 			throws Exception {
 		String response = "error";
-		// data=fixEncoding(data);
-		InetAddress addr = InetAddress.getByName(host);
-		Socket socket = new Socket(addr, port);
-		BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(
-				socket.getOutputStream(), "UTF8"));
-		wr.write("POST " + path + " HTTP/1.0\r\n");
-		wr.write("Host: " + host + "\r\n");
-		wr.write("Content-Type: application/x-www-form-urlencoded\r\n");
-		wr.write("Content-Length: " + data.length() + "\r\n");
-		wr.write("\r\n"); // 以空行作为分割
-		// 发送数据
-		wr.write(data);
-		wr.flush();
-		// 读取返回信息
-		BufferedReader rd = new BufferedReader(new InputStreamReader(
-				socket.getInputStream(), "UTF-8"));
-		String line;
-		while ((line = rd.readLine()) != null) {
-			System.out.println(line);
-			response = line;
+
+		try {
+
+			// data=fixEncoding(data);
+			InetAddress addr = InetAddress.getByName(host);
+			Socket socket = new Socket(addr, port);
+			BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(
+					socket.getOutputStream(), "UTF8"));
+			wr.write("POST " + path + " HTTP/1.0\r\n");
+			wr.write("Host: " + host + "\r\n");
+			wr.write("Content-Type: application/x-www-form-urlencoded\r\n");
+			wr.write("Content-Length: " + data.length() + "\r\n");
+			wr.write("\r\n"); // 以空行作为分割
+			// 发送数据
+			wr.write(data);
+			wr.flush();
+			// 读取返回信息
+			BufferedReader rd = new BufferedReader(new InputStreamReader(
+					socket.getInputStream(), "UTF-8"));
+			String line;
+			while ((line = rd.readLine()) != null) {
+				System.out.println(line);
+				response = line;
+			}
+			wr.close();
+			rd.close();
+			socket.close();
+			return response;
+		} catch (Exception e) {
+			gtlog("exception-postValidate");
+			e.printStackTrace();
 		}
-		wr.close();
-		rd.close();
-		socket.close();
+
 		return response;
+
 	}
 
 	/**
