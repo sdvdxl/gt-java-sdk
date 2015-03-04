@@ -269,7 +269,7 @@ public class GeetestLib {
 			}
 		} catch (Exception e) {
 			gtlog("exception:register api:");
-			// e.printStackTrace();
+			e.printStackTrace();
 		}
 		return 0;
 	}
@@ -455,7 +455,7 @@ public class GeetestLib {
 	 * @param message
 	 */
 	public void gtlog(String message) {
-		//System.out.println(message);
+		System.out.println(message);
 	}
 
 	private boolean checkResultByPrivate(String origin, String validate) {
