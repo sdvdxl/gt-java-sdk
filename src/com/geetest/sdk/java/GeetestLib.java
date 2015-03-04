@@ -36,7 +36,7 @@ public class GeetestLib {
 	private final String verName = "15.1.28.1";
 
 	private final String baseUrl = "vapi.geetest.com";
-	private final String api_url = "http://"+ baseUrl;
+	private final String api_url = "http://" + baseUrl;
 
 	private final int defaultIsMobile = 0;
 	private final int defaultMobileWidth = 260;// the default width of the mible
@@ -381,7 +381,7 @@ public class GeetestLib {
 		String validate = request.getParameter("geetest_validate");
 		String seccode = request.getParameter("geetest_seccode");
 
-		String host =  baseUrl;
+		String host = baseUrl;
 		String path = "/validate.php";
 		int port = 80;
 		String query = "seccode=" + seccode;
@@ -423,7 +423,7 @@ public class GeetestLib {
 	 */
 	private boolean validate(String challenge, String validate, String seccode) {
 		gtlog("validate");
-		String host =  baseUrl;
+		String host = baseUrl;
 		String path = "/validate.php";
 		int port = 80;
 		if (validate.length() > 0 && checkResultByPrivate(challenge, validate)) {
@@ -455,7 +455,7 @@ public class GeetestLib {
 	 * @param message
 	 */
 	public void gtlog(String message) {
-		System.out.println(message);
+		// System.out.println(message);
 	}
 
 	private boolean checkResultByPrivate(String origin, String validate) {
