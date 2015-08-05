@@ -57,8 +57,7 @@ body {
 
 			<%--Start  Code--%>
 			<div class="row">
-				<div id="div_geetest_lib"></div>
-				<div id="div_id_embed"></div>
+				<div id="gt-box"></div>
 
 				<%--End  Code--%>
 
@@ -78,7 +77,7 @@ body {
 									gt: result.gt,
 									challenge: result.challenge,
 									success: result.success,
-									id: '#div_id_embed',
+									id: '#gt-box',
 									product: 'embed',
 									https: true,
 									onSuccess: function () {
@@ -87,7 +86,6 @@ body {
 							});
 						},
 					});
-				
 				</script>
 
 
