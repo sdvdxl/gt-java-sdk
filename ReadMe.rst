@@ -32,7 +32,7 @@
 
 1. GeetestConfig.java
 	Web用户配置文件。此处填写用户自己申请的验证模块ID/KEY
-#. StartCapthcaServlet.java
+#. StartCaptchaServlet.java
 	用户判断极验服务器是否Down机的示例Servlet,页面生成前置处理
 #. VerifyLoginServlet.java
 	提交验证调用Sdk的示例Servlet
