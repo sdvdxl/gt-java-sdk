@@ -67,23 +67,19 @@ body {
 				</div>
 
 				<script>
-						
+
 					$.ajax({
 						url : "StartCapthcaServlet",
 						type : "get",
 						dataType : 'JSON',
 						success : function(result) {
 							gt({
-									gt: result.gt,
+                                    gt: result.gt,
 									challenge: result.challenge,
 									success: result.success,
-									id: '#gt-box',
 									product: 'embed',
-									https: true,
-									onSuccess: function () {
-										// success to do something
-									},
-							});
+									https: true
+                                });
 						},
 					});
 				</script>
