@@ -16,7 +16,7 @@ import com.geetest.sdk.java.GeetestLib;
  * @author zheng
  *
  */
-public class StartCapthcaServlet extends HttpServlet {
+public class StartCaptchaServlet extends HttpServlet {
 
 	/**
 	 * 

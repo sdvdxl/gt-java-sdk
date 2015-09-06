@@ -69,7 +69,7 @@ body {
 				<script>
 
 					$.ajax({
-						url : "StartCapthcaServlet",
+						url : "StartCaptchaServlet",
 						type : "get",
 						dataType : 'JSON',
 						success : function(result) {
