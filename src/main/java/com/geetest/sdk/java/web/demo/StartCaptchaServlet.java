@@ -1,14 +1,13 @@
 package com.geetest.sdk.java.web.demo;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import com.geetest.sdk.java.GeetestLib;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.geetest.sdk.java.GeetestLib;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * 使用Get的方式返回：challenge和capthca_id 此方式以实现前后端完全分离的开发模式 专门实现failback

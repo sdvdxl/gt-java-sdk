@@ -1,14 +1,13 @@
 package com.geetest.sdk.java.web.demo;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import com.geetest.sdk.java.GeetestLib;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.geetest.sdk.java.GeetestLib;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class VerifyLoginServlet extends HttpServlet {
 
